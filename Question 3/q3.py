@@ -35,7 +35,7 @@ def write_file(path, header, data):
     for cols in data:
         row = ""
         for col in cols:
-            row += "\t" + str(col)
+            row += "\t" + '{:e}'.format(col)
         row = row[1:] + "\n"
         f.write(row)
     f.close()
@@ -124,8 +124,6 @@ def train(train_data_path, train_label_path, model_path, log_path, batch_size, e
         """read data from txt"""
         data = read_file(train_data_path, read_header=False)
         data = np.array(data)
-        # label = pd.read_csv(train_label_path, delim_whitespace=True)
-        # label = np.array(label)
         label = read_file(train_label_path, read_header=False)
         label = np.array(label)
         print("read data: ", data.shape)
