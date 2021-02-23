@@ -20,20 +20,15 @@ def read_file(path, read_header=False):
 
 
 def write_file(path, header, data):
-    f = open(path, "w+")
-    if header is not None:
-        row = ""
-        for h in header:
-            row += "\t" + h
-        row = row[1:] + "\n"
-        f.write(row)
-    for cols in data:
-        row = ""
-        for col in cols:
-            row += "\t" + str(col)
-        row = row[1:] + "\n"
-        f.write(row)
-    f.close()
+    with open(path, "w+") as f:
+        if header is not None:
+            row = "".join("\t" + h for h in header)
+            row = row[1:] + "\n"
+            f.write(row)
+        for cols in data:
+            row = "".join("\t" + str(col) for col in cols)
+            row = row[1:] + "\n"
+            f.write(row)
 
 
 def show(input_polygon_path, input_points_path):
@@ -232,9 +227,7 @@ def main():
 
     with open(output_path, "w+") as f:
         for i in range(len(result)):
-            data = ""
-            for j in points_coordinate_list[i]:
-                data += str(j) + "\t"
+            data = "".join(str(j) + "\t" for j in points_coordinate_list[i])
             data += result[i] + "\n"
             f.write(data)
     f.close()

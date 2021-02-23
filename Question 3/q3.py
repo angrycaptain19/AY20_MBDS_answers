@@ -25,20 +25,15 @@ def read_file(path, read_header=False):
 
 
 def write_file(path, header, data):
-    f = open(path, "w+")
-    if header is not None:
-        row = ""
-        for h in header:
-            row += "\t" + h
-        row = row[1:] + "\n"
-        f.write(row)
-    for cols in data:
-        row = ""
-        for col in cols:
-            row += "\t" + '{:e}'.format(col)
-        row = row[1:] + "\n"
-        f.write(row)
-    f.close()
+    with open(path, "w+") as f:
+        if header is not None:
+            row = "".join("\t" + h for h in header)
+            row = row[1:] + "\n"
+            f.write(row)
+        for cols in data:
+            row = "".join("\t" + '{:e}'.format(col) for col in cols)
+            row = row[1:] + "\n"
+            f.write(row)
 
 
 def multilayer_perceptron(x, weight, bias):
@@ -151,13 +146,10 @@ def train(train_data_path, train_label_path, model_path, log_path, batch_size, e
             if ckpt and ckpt.model_checkpoint_path:
                 saver.restore(sess, ckpt.model_checkpoint_path)
                 print("restore and continue training!")
-            else:
-                pass
-
         start_time = time.time()
         step = sess.run(global_step)
-        for i in range(epochs):
-            for j in range(batch_total):
+        for _ in range(epochs):
+            for _ in range(batch_total):
                 x_batch, y_batch = sess.run(one_element)
 
                 _, summary_train = sess.run([optimizer, merged], feed_dict={x: x_batch, y: y_batch})
