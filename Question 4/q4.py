@@ -19,20 +19,15 @@ def read_file(path, read_header=False):
 
 
 def write_file(path, header, data):
-    f = open(path, "w+")
-    if header is not None:
-        row = ""
-        for h in header:
-            row += "\t" + h
-        row = row[1:] + "\n"
-        f.write(row)
-    for cols in data:
-        row = ""
-        for col in cols:
-            row += "\t" + str(col)
-        row = row[1:] + "\n"
-        f.write(row)
-    f.close()
+    with open(path, "w+") as f:
+        if header is not None:
+            row = "".join("\t" + h for h in header)
+            row = row[1:] + "\n"
+            f.write(row)
+        for cols in data:
+            row = "".join("\t" + str(col) for col in cols)
+            row = row[1:] + "\n"
+            f.write(row)
 
 
 def set_value(matrix, value):
@@ -59,57 +54,14 @@ def _4_recursive(matrix, x, y):
 
     if right[0] == 1:
         _4_recursive(matrix, x, y + 1)
-        if left[0] == 1:
-            _4_recursive(matrix, x, y - 1)
-            if up[0] == 1:
-                _4_recursive(matrix, x - 1, y, )
-                if down[0] == 1:
-                    _4_recursive(matrix, x + 1, y)
-                else:
-                    return
-            else:
-                if down[0] == 1:
-                    _4_recursive(matrix, x + 1, y)
-                else:
-                    return
-        else:
-            if up[0] == 1:
-                _4_recursive(matrix, x - 1, y)
-                if down[0] == 1:
-                    _4_recursive(matrix, x + 1, y)
-                else:
-                    return
-            else:
-                if down[0] == 1:
-                    _4_recursive(matrix, x + 1, y)
-                else:
-                    return
+    if left[0] == 1:
+        _4_recursive(matrix, x, y - 1)
+    if up[0] == 1:
+        _4_recursive(matrix, x - 1, y, )
+    if down[0] == 1:
+        _4_recursive(matrix, x + 1, y)
     else:
-        if left[0] == 1:
-            _4_recursive(matrix, x, y - 1)
-            if up[0] == 1:
-                _4_recursive(matrix, x - 1, y)
-                if down[0] == 1:
-                    _4_recursive(matrix, x + 1, y)
-                else:
-                    return
-            else:
-                if down[0] == 1:
-                    _4_recursive(matrix, x + 1, y)
-                else:
-                    return
-        else:
-            if up[0] == 1:
-                _4_recursive(matrix, x - 1, y)
-                if down[0] == 1:
-                    _4_recursive(matrix, x + 1, y)
-                else:
-                    return
-            else:
-                if down[0] == 1:
-                    _4_recursive(matrix, x + 1, y)
-                else:
-                    return
+        return
     return
 
 
